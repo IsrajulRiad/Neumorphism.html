@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>I Love You Mini</title>
+  <title>I ♥ U Mini Animation</title>
   <style>
     body {
       margin: 0;
@@ -12,6 +12,7 @@
       justify-content: center;
       align-items: center;
       font-family: 'Arial', sans-serif;
+      overflow: hidden;
     }
 
     .container {
@@ -27,14 +28,31 @@
     .text {
       display: flex;
       gap: 0.5em;
-      transition: transform 1s ease;
-      position: relative;
       z-index: 2;
+      position: relative;
     }
 
     .word {
-      opacity: 1;
-      transition: opacity 0.5s, transform 0.5s;
+      transition: all 0.5s ease;
+    }
+
+    .bubble-pop {
+      animation: pop 0.5s forwards;
+    }
+
+    @keyframes pop {
+      0% {
+        transform: scale(1);
+        opacity: 1;
+      }
+      50% {
+        transform: scale(1.8);
+        opacity: 0.7;
+      }
+      100% {
+        transform: scale(0);
+        opacity: 0;
+      }
     }
 
     .bar {
@@ -48,42 +66,22 @@
 
     .bar.left {
       left: -15%;
-      animation: slideInLeft 4s forwards;
+      animation: slideInLeft 10s forwards;
     }
 
     .bar.right {
       right: -15%;
-      animation: slideInRight 4s forwards;
+      animation: slideInRight 10s forwards;
     }
 
     @keyframes slideInLeft {
       0% { left: -15%; }
-      100% { left: 35%; }
+      100% { left: 45%; }
     }
 
     @keyframes slideInRight {
       0% { right: -15%; }
-      100% { right: 35%; }
-    }
-
-    .pop {
-      transform: scale(2);
-      opacity: 0;
-    }
-
-    .heart {
-      position: absolute;
-      font-size: 3rem;
-      color: #ff4d6d;
-      opacity: 0;
-      transform: scale(0);
-      animation: heartPop 0.6s ease-in-out forwards;
-      z-index: 2;
-    }
-
-    @keyframes heartPop {
-      0% { opacity: 0; transform: scale(0); }
-      100% { opacity: 1; transform: scale(1); }
+      100% { right: 45%; }
     }
   </style>
 </head>
@@ -98,26 +96,51 @@
     <span class="word" id="mini">Mini</span>
   </div>
   <div class="bar right"></div>
-  <div class="heart" id="heart">♥</div>
 </div>
 
 <script>
-  setTimeout(() => {
-    document.getElementById('love').classList.add('pop');
-    document.getElementById('heart').style.left = '50%';
-    document.getElementById('heart').style.transform = 'translateX(-50%)';
-    document.getElementById('heart').style.animationDelay = '0s';
-  }, 1800);
+  const delay = (ms) => new Promise(res => setTimeout(res, ms));
 
-  setTimeout(() => {
-    document.getElementById('you').textContent = 'U';
-    document.getElementById('you').classList.add('pop');
-  }, 2800);
+  async function animateSequence() {
+    await delay(2500);
+    // Stage 1: Love → ♥
+    const love = document.getElementById('love');
+    love.classList.add('bubble-pop');
+    await delay(500);
+    love.textContent = '♥';
+    love.style.opacity = 1;
+    love.style.transform = 'scale(1)';
 
-  setTimeout(() => {
-    document.getElementById('i').classList.add('pop');
-    document.getElementById('you').style.opacity = '0';
-  }, 3600);
+    await delay(1500);
+    // Stage 2: mini → (remove)
+    const mini = document.getElementById('mini');
+    mini.classList.add('bubble-pop');
+    await delay(500);
+    mini.style.display = 'none';
+
+    // Stage 3: you (lowercase) → You
+    const you = document.getElementById('you');
+    you.textContent = 'You';
+
+    await delay(1500);
+    // Stage 4: You → U
+    you.classList.add('bubble-pop');
+    await delay(500);
+    you.textContent = 'U';
+    you.style.opacity = 1;
+    you.style.transform = 'scale(1)';
+
+    await delay(1500);
+    // Final Stage: I and U pop, only ♥ remains
+    const i = document.getElementById('i');
+    i.classList.add('bubble-pop');
+    you.classList.add('bubble-pop');
+    await delay(500);
+    i.style.display = 'none';
+    you.style.display = 'none';
+  }
+
+  animateSequence();
 </script>
 
 </body>
