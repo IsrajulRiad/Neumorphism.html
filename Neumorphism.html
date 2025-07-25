@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>I ♥ U Animation</title>
+  <title>I ♥ U Mini Animation</title>
   <style>
     body {
       margin: 0;
@@ -15,137 +15,123 @@
       overflow: hidden;
     }
 
-    .container {
+    .wrapper {
+      width: 100%;
+      max-width: 800px;
       position: relative;
       display: flex;
-      align-items: center;
       justify-content: center;
-      font-size: 2.5rem;
-      color: #ffffff;
+      align-items: center;
+    }
+
+    .bar {
+      width: 30px;
+      height: 100px;
+      background: #e63946;
+      animation: pushIn 10s forwards;
       z-index: 2;
     }
 
-    .text {
+    .bar.left {
+      border-top-left-radius: 10px;
+      border-bottom-left-radius: 10px;
+      margin-right: 10px;
+    }
+
+    .bar.right {
+      border-top-right-radius: 10px;
+      border-bottom-right-radius: 10px;
+      margin-left: 10px;
+    }
+
+    .text-area {
       display: flex;
       gap: 0.5em;
-      position: relative;
+      justify-content: center;
+      align-items: center;
+      font-size: 2.5rem;
+      color: #ffffff;
+      white-space: nowrap;
       z-index: 3;
     }
 
     .word {
-      transition: all 0.5s ease;
+      transition: all 0.4s ease;
     }
 
     .bubble-pop {
-      animation: pop 0.5s forwards;
+      animation: pop 0.4s forwards;
     }
 
     @keyframes pop {
-      0% {
-        transform: scale(1);
-        opacity: 1;
-      }
-      50% {
-        transform: scale(1.8);
-        opacity: 0.6;
-      }
-      100% {
-        transform: scale(0);
-        opacity: 0;
-      }
+      0%   { transform: scale(1); opacity: 1; }
+      50%  { transform: scale(2); opacity: 0.4; }
+      100% { transform: scale(0); opacity: 0; }
     }
 
-    .bar {
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      width: 20%;
-      background: #e63946;
-      z-index: 1; /* behind text */
-      opacity: 0.8;
-    }
-
-    .bar.left {
-      left: -20%;
-      animation: slideInLeft 10s forwards;
-    }
-
-    .bar.right {
-      right: -20%;
-      animation: slideInRight 10s forwards;
-    }
-
-    @keyframes slideInLeft {
-      0% { left: -20%; }
-      100% { left: 30%; }
-    }
-
-    @keyframes slideInRight {
-      0% { right: -20%; }
-      100% { right: 30%; }
+    @keyframes pushIn {
+      0% {}
+      100% {}
     }
   </style>
 </head>
 <body>
 
-<div class="container">
-  <!-- Bars underneath -->
+<div class="wrapper">
   <div class="bar left"></div>
-  <div class="bar right"></div>
-
-  <!-- Sentence -->
-  <div class="text" id="text">
+  <div class="text-area" id="text">
     <span class="word" id="i">I</span>
     <span class="word" id="love">Love</span>
     <span class="word" id="you">You</span>
     <span class="word" id="mini">Mini</span>
   </div>
+  <div class="bar right"></div>
 </div>
 
 <script>
   const delay = (ms) => new Promise(res => setTimeout(res, ms));
 
-  async function runAnimation() {
+  async function animateWords() {
     await delay(3000);
 
-    // Stage 1: Love → ♥
+    // Love → ♥
     const love = document.getElementById('love');
     love.classList.add('bubble-pop');
-    await delay(500);
+    await delay(400);
     love.textContent = '♥';
     love.style.opacity = 1;
     love.style.transform = 'scale(1)';
 
     await delay(1500);
 
-    // Stage 2: Remove "Mini"
+    // Mini → remove
     const mini = document.getElementById('mini');
     mini.classList.add('bubble-pop');
-    await delay(500);
+    await delay(400);
     mini.style.display = 'none';
 
     await delay(1500);
 
-    // Stage 3: You → U
+    // You → U
     const you = document.getElementById('you');
     you.classList.add('bubble-pop');
-    await delay(500);
+    await delay(400);
     you.textContent = 'U';
     you.style.opacity = 1;
     you.style.transform = 'scale(1)';
 
     await delay(1500);
 
-    // Final Stage: I and U pop
+    // I & U → pop
     const i = document.getElementById('i');
     i.classList.add('bubble-pop');
     you.classList.add('bubble-pop');
-    await delay(500);
+    await delay(400);
     i.style.display = 'none';
     you.style.display = 'none';
   }
 
-  runAnimation();
+  animateWords();
 </script>
 
 </body>
